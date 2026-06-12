@@ -189,6 +189,7 @@ function listenState() {
     const qIdx   = s.currentQuestion ?? -1;
     const isOpen = s.voteOpen === true;
     const opts   = s.options || [];
+    const qText  = s.question || '';
 
     // Nouvelle question → reset complet (toujours, même si vote pas encore ouvert)
     if (qIdx !== currentQuestion) {
@@ -203,7 +204,7 @@ function listenState() {
       if (!voteIsOpen) {
         // Vote vient de s'ouvrir → (re)construire l'UI
         voteIsOpen = true;
-        buildVoteUI(qIdx, opts);
+        buildVoteUI(qIdx, opts, qText);
       }
       show('vote');
       return;
@@ -242,8 +243,8 @@ function show(screen) {
   }
 }
 
-function buildVoteUI(qIdx, options) {
-  qLabel.textContent       = `Question ${qIdx + 1}`;
+function buildVoteUI(qIdx, options, questionText) {
+  qLabel.textContent       = questionText || `Question ${qIdx + 1}`;
   multiHint.style.display  = 'block';
   optList.innerHTML        = '';
   selected                 = new Set();

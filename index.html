@@ -467,7 +467,7 @@ function openVote() {
   voteOpen=true;
   elVotePill.classList.add('show');
   const qIdx = slide-2;
-  update(ref(db,'state'), { currentQuestion: qIdx, voteOpen: true, options: QUESTIONS[qIdx].options });
+  update(ref(db,'state'), { currentQuestion: qIdx, voteOpen: true, options: QUESTIONS[qIdx].options, question: QUESTIONS[qIdx].q });
   if(votesListener){ votesListener(); votesListener=null; }
   votesListener = onValue(ref(db,`votes/${qKey()}`), snap => {
     currentVotes={}; totalVoters=0;
