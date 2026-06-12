@@ -43,7 +43,7 @@
       "options": [
         "Aucun",
         "[À COMPLÉTER] en comptant les demi-frères et sœurs",
-        "[À COMPLÉTER] en comptant aussi les enfants des conjoints (Louis & co)",
+        "9",
         "Personne ne le sait exactement"
       ],
       "correct": [0, 1, 2, 3],
