@@ -42,12 +42,12 @@
       "q": "Combien de frères et sœurs Emmanuelle a-t-elle ?",
       "options": [
         "Aucun",
-        "[À COMPLÉTER] en comptant les demi-frères et sœurs",
+        "6",
         "9",
         "Personne ne le sait exactement"
       ],
-      "correct": [0, 1, 2, 3],
-      "punch": "Ca dépend du point de vue ! Un arbre généalogique est à l'entrée pour les curieux."
+      "correct": [2],
+      "punch": "Un arbre généalogique est à l'entrée pour les curieux."
     },
     {
       "q": "Qu'est-ce qui a d'abord séduit Emmanuelle chez Olivier ?",
