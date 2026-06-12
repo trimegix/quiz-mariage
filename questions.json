@@ -72,7 +72,7 @@
       "punch": "N'importe quoi la théorie d'Olivier"
     },
     {
-      "q": "Pour ceux qui l'ignorent, Emma a un talent divinatoire. Qu'est-ce qu'elle n'a pourtant su deviner ?",
+      "q": "Pour ceux qui l'ignorent, Emma a un talent divinatoire. Qu'est-ce qu'elle n'a pas su deviner ?",
       "options": [
         "Elle nous connait tellement bien qu'elle devine les prénoms de nos futurs enfants",
         "En maitre footix elle a su en avance que le PSG allait faire le back-to-back",
@@ -85,7 +85,7 @@
     {
       "q": "Emmanuelle entretient une relation particulière avec l'Allemagne. Qu'est-ce qu'elle aime le moins ?",
       "options": [
-        "Sa langue. Une maitrise parfaite, supérieure à ceux qui y ont vécu 8 ans et qui sont en couple avec une prof d'allemand",
+        "Sa langue. En a-t-elle une maitrise supérieure à ceux qui y ont vécu 8 ans et qui sont en couple avec une prof d'allemand ?",
         "Ses bières, passion forgée auprès des oktoberfest, des rayons Monoprix et d'Olivier",
         "Ses meilleures soirées et weekends berlinois",
         "Sa gastronomie, currywurst, kebab et légumes insipides"
@@ -113,7 +113,7 @@
         "Une revendication : après toutes ces heures à subir les chefs, elle peut bien se payer un peu en nature !"
       ],
       "correct": [3],
-      "note": "Oooooh ! Pas beau !"
+      "punch": "Oooooh ! Pas beau !"
     },
     {
       "q": "Quelle est la chose la plus improbable qu'Emma ait faite en vacances avec nous ?",
@@ -130,7 +130,7 @@
       "options": [
         "Conductrice de train japonais : une ponctualité infaillible, l'heure c'est l'heure !",
         "Sage-femme : toujours là pour prendre soin des autres",
-        "Voyante : voir la question sur ses prémonitions",
+        "Voyante : on vous a déjà dit qu'elle a un talent divinatoire !",
         "Pleureuse égyptienne : la larme facile, pour les petits et grands bonheurs, surtout ceux des autres"
       ],
       "correct": [0, 1, 2, 3],
@@ -151,7 +151,7 @@
       "q": "Isa a retrouvé un sms vieux de 10 ans d'Emma, qui revenait d'un examen cardiaque. Qu'avait-elle répondu à «comment ça s'est passé ?»",
       "options": [
         "«Ça va moyen, je dois retourner faire d'autres examens»",
-        "«Pour mon cœur ce n'est rien : c'était mon cœur qui s'emballait pour Olivier :)»",
+        "«C'était juste mon cœur qui s'emballait pour Olivier »",
         "«Ce n'est finalement rien, ça doit être Olivier qui m'énerve»",
         "La réponse D"
       ],
