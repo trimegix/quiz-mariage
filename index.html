@@ -698,7 +698,7 @@ async function computeLeaderboard() {
   const snap = await get(ref(db,'votes'));
   if(!snap.exists()) return [];
   const votesData = snap.val();
-  const scores={}, names={};
+  const scores={};
   for(let i=0;i<QUESTIONS.length;i++){
     const q=QUESTIONS[i];
     const correct=Array.isArray(q.correct)?q.correct:[];
@@ -706,7 +706,7 @@ async function computeLeaderboard() {
     const nWrong=q.options.length-nCorrect;
     const qVotes=votesData[`q${i}`]||{};
     for(const [key,val] of Object.entries(qVotes)){
-      if(!names[key]) names[key]=key.replace(/_[a-z0-9]{4}$/,'').replace(/_/g,' ');
+      const name=key.replace(/_[a-z0-9]{4}$/,'').replace(/_/g,' ');
       const selected=Array.isArray(val)?val:(typeof val==='number'?[val]:[]);
       let s=0;
       if(nCorrect>0){
@@ -714,14 +714,14 @@ async function computeLeaderboard() {
         const misses=selected.filter(idx=>!correct.includes(idx)).length;
         s=Math.max(0, hits/nCorrect - (nWrong>0?misses/nWrong:0));
       }
-      scores[key]=(scores[key]||0)+s;
+      scores[name]=(scores[name]||0)+s;
     }
   }
   const N=QUESTIONS.length;
   return Object.entries(scores)
     .sort((a,b)=>b[1]-a[1])
     .slice(0,5)
-    .map(([key,score])=>({name:names[key],score,pct:score/N}));
+    .map(([name,score])=>({name,score,pct:score/N}));
 }
 
 async function showLeaderboard(){
