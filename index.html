@@ -615,7 +615,7 @@ function render(){
   elQrMini.classList.toggle('show', isQuestionSlide());
   if(slide===0){ closeVote(); show(elWelcome); return; }
   if(slide===1){ closeVote(); show(elQrpage); return; }
-  if(slide===N+2){ closeVote(); show(elFinal); return; }
+  if(slide===N+2){ closeVote(); show(elFinal); showLeaderboard(); return; }
   show(elQuiz);
   if(built!==slide-2) buildQuestion(slide-2);
   applyStep();
