@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Le grand quiz de la mariée</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --plum:#2B1B3D; --panel:#46295f; --cream:#FFF4E6;
+  --raspberry:#FF5D8F; --tangerine:#FF9F45; --pistachio:#7BD389; --lemon:#FFD93D;
+  --dim:rgba(255,244,230,.32); --shadow:0 18px 50px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  font-family:'Nunito',system-ui,sans-serif;color:var(--cream);
+  background:
+    radial-gradient(1200px 700px at 18% 8%,rgba(255,93,143,.20),transparent 60%),
+    radial-gradient(1000px 700px at 85% 92%,rgba(123,211,137,.18),transparent 60%),
+    radial-gradient(900px 600px at 90% 12%,rgba(255,217,61,.14),transparent 60%),
+    var(--plum);
+  overflow:hidden;-webkit-font-smoothing:antialiased;
+}
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+
+/* ── topbar ── */
+#topbar{
+  position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:center;
+  gap:.7rem;padding:1.1rem;font-family:'Fredoka',sans-serif;font-weight:600;letter-spacing:.04em;
+  opacity:0;transition:opacity .4s;z-index:5;
+}
+#topbar.show{opacity:.9}
+#counter{font-size:clamp(.9rem,1.6vw,1.15rem)}
+#dots{display:flex;gap:.45rem}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--dim);transition:all .3s}
+.dot.active{background:var(--lemon);transform:scale(1.35);box-shadow:0 0 14px var(--lemon)}
+.dot.done{background:var(--raspberry)}
+
+/* ── voter badge (coin haut-droit) ── */
+#voter-badge{
+  position:fixed;top:1rem;right:1.2rem;z-index:6;
+  font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(.8rem,1.5vw,1rem);
+  background:rgba(255,244,230,.12);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,244,230,.18);border-radius:999px;
+  padding:.35rem .9rem;display:none;align-items:center;gap:.4rem;color:var(--cream);
+}
+#voter-badge.show{display:flex}
+#voter-count{color:var(--lemon);font-weight:700}
+
+/* ── QR mini (coin bas-gauche, visible pendant le vote) ── */
+#qr-mini{
+  position:fixed;bottom:1.2rem;left:1.2rem;z-index:6;
+  background:rgba(255,244,230,.08);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,244,230,.15);border-radius:16px;
+  padding:.55rem;display:flex;flex-direction:column;align-items:center;gap:.3rem;
+  font-family:'Fredoka',sans-serif;font-weight:500;font-size:.7rem;color:var(--dim);
+  opacity:0;transition:opacity .5s;pointer-events:none;
+}
+#qr-mini.show{opacity:1}
+#qr-mini canvas{border-radius:8px;display:block}
+
+/* ── views ── */
+.view{
+  position:absolute;inset:0;display:none;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:clamp(1rem,4vw,3rem);text-align:center;
+}
+.view.show{display:flex}
+
+/* ── page accueil ── */
+#welcome .kicker{
+  font-family:'Fredoka',sans-serif;font-weight:500;text-transform:uppercase;
+  letter-spacing:.32em;font-size:clamp(.7rem,1.6vw,1rem);color:var(--tangerine);margin:0 0 .4rem;
+}
+#welcome .names{
+  font-family:'Caveat',cursive;font-weight:700;line-height:.92;
+  font-size:clamp(3.4rem,14vw,11rem);margin:0;
+  background:linear-gradient(120deg,var(--raspberry),var(--tangerine) 45%,var(--lemon));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 10px 30px rgba(255,93,143,.25));
+  animation:floaty 5s ease-in-out infinite;
+}
+#welcome .title{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.4rem,4.6vw,3rem);margin:.3rem 0 0}
+#welcome .candies{font-size:clamp(1.6rem,5vw,3rem);margin:1.4rem 0 .4rem;letter-spacing:.4rem}
+@keyframes floaty{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-12px) rotate(1deg)}}
+
+/* ── page QR ── */
+#qrpage{gap:clamp(1rem,3vh,2rem)}
+#qrpage .qr-title{
+  font-family:'Caveat',cursive;font-weight:700;
+  font-size:clamp(2.8rem,10vw,7rem);line-height:1;margin:0;
+  background:linear-gradient(120deg,var(--raspberry),var(--tangerine) 50%,var(--lemon));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+#qrpage .qr-sub{
+  font-family:'Fredoka',sans-serif;font-weight:600;
+  font-size:clamp(1rem,2.8vw,1.8rem);opacity:.75;margin:0;
+}
+#qr-big-wrap{
+  background:var(--cream);border-radius:28px;padding:clamp(12px,2.5vw,24px);
+  box-shadow:var(--shadow);display:inline-flex;
+}
+#qr-big{display:block;width:clamp(180px,30vmin,340px);height:clamp(180px,30vmin,340px)}
+#qrpage .qr-url{
+  font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(.85rem,2vw,1.3rem);
+  color:var(--lemon);letter-spacing:.02em;margin:0;
+}
+
+/* ── boutons ── */
+.start-btn{
+  margin-top:1.4rem;border:0;cursor:pointer;
+  font-family:'Fredoka',sans-serif;font-weight:600;
+  font-size:clamp(1rem,2.4vw,1.4rem);color:var(--plum);
+  padding:.85rem 1.8rem;border-radius:999px;
+  background:linear-gradient(120deg,var(--lemon),var(--tangerine));
+  box-shadow:var(--shadow);transition:transform .15s;
+}
+.start-btn:hover{transform:translateY(-2px) scale(1.03)}
+.start-btn:active{transform:translateY(0) scale(.98)}
+
+/* ── quiz ── */
+#quiz{justify-content:center;gap:clamp(.6rem,2vh,1.4rem)}
+
+/* titre large */
+.q-text{
+  font-family:'Fredoka',sans-serif;font-weight:700;line-height:1.1;
+  font-size:clamp(1.5rem,4.2vw,3.2rem);
+  width:min(1140px,96vw);          /* même largeur que la grille d'options */
+  max-width:100%;
+  margin:0;
+  opacity:0;transform:translateY(18px);transition:opacity .5s,transform .5s;
+}
+.q-text.in{opacity:1;transform:none}
+
+/* ── pill vote ouvert ── */
+#vote-pill{
+  font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(.85rem,1.8vw,1.1rem);
+  padding:.4rem 1.1rem;border-radius:999px;
+  background:rgba(255,93,143,.18);border:1.5px solid var(--raspberry);color:var(--raspberry);
+  display:none;align-items:center;gap:.4rem;
+  /* animation pulse supprimée */
+}
+#vote-pill.show{display:flex}
+
+
+/* ── options + barres ── */
+.options{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(.5rem,1.5vw,.9rem);width:min(1140px,96vw);
+}
+.opt{
+  position:relative;display:flex;align-items:stretch;text-align:left;
+  background:var(--panel);border:2px solid rgba(255,244,230,.08);border-radius:20px;
+  box-shadow:var(--shadow);overflow:hidden;
+  opacity:0;transform:translateY(26px) scale(.92);
+  transition:opacity .45s cubic-bezier(.2,.9,.3,1.4),transform .45s cubic-bezier(.2,.9,.3,1.4),
+             border-color .35s,filter .35s;
+}
+.opt.in{opacity:1;transform:none}
+.opt-bar{
+  position:absolute;inset:0;right:auto;width:0%;
+  transition:width .6s cubic-bezier(.4,0,.2,1);opacity:.22;pointer-events:none;
+}
+.opt:nth-child(1) .opt-bar{background:var(--raspberry)}
+.opt:nth-child(2) .opt-bar{background:var(--tangerine)}
+.opt:nth-child(3) .opt-bar{background:var(--pistachio)}
+.opt:nth-child(4) .opt-bar{background:var(--lemon)}
+.opt:nth-child(5) .opt-bar{background:var(--raspberry)}
+.opt:nth-child(6) .opt-bar{background:var(--tangerine)}
+.opt-inner{position:relative;z-index:1;display:flex;align-items:center;gap:.8rem;padding:clamp(.7rem,1.6vw,1.2rem);width:100%}
+.badge{
+  flex:none;width:clamp(2.1rem,4.5vw,3rem);height:clamp(2.1rem,4.5vw,3rem);border-radius:14px;
+  display:grid;place-items:center;font-family:'Fredoka',sans-serif;font-weight:700;
+  font-size:clamp(1.1rem,2.5vw,1.7rem);color:var(--plum);
+}
+.opt:nth-child(1) .badge{background:var(--raspberry)}
+.opt:nth-child(2) .badge{background:var(--tangerine)}
+.opt:nth-child(3) .badge{background:var(--pistachio)}
+.opt:nth-child(4) .badge{background:var(--lemon)}
+.opt:nth-child(5) .badge{background:var(--raspberry)}
+.opt:nth-child(6) .badge{background:var(--tangerine)}
+.opt-right{display:flex;flex-direction:column;flex:1;gap:.15rem}
+.opt .label{font-weight:700;font-size:clamp(.95rem,2.2vw,1.5rem);line-height:1.2}
+.opt .vote-stat{
+  font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(.75rem,1.4vw,1rem);
+  color:var(--lemon);opacity:0;height:0;overflow:hidden;
+  transition:opacity .3s,height .3s;
+}
+.opt .vote-stat.show{opacity:1;height:auto}
+
+/* révélation */
+.opt.correct{
+  border-color:var(--pistachio);
+  box-shadow:0 0 0 3px rgba(123,211,137,.5),0 18px 50px rgba(123,211,137,.35);
+  animation:pop .5s cubic-bezier(.2,.9,.3,1.6);
+}
+.opt.correct .opt-bar{opacity:.38}
+.opt.correct::after{
+  content:"✓";position:absolute;top:-12px;right:-12px;width:36px;height:36px;
+  border-radius:50%;background:var(--pistachio);color:var(--plum);
+  display:grid;place-items:center;font-weight:800;font-size:1.1rem;
+  box-shadow:var(--shadow);z-index:2;
+}
+.opt.faded{filter:grayscale(.55) brightness(.7);opacity:.55}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.06)}100%{transform:scale(1.03)}}
+
+/* banners */
+.banner{
+  font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.2rem,3.2vw,2.2rem);
+  padding:.5rem 1.3rem;border-radius:999px;opacity:0;transform:scale(.8);margin:.2rem auto 0;
+  transition:opacity .4s,transform .4s cubic-bezier(.2,.9,.3,1.6);
+}
+.banner.in{opacity:1;transform:none}
+.banner.good{background:linear-gradient(120deg,var(--pistachio),var(--lemon));color:var(--plum)}
+.banner.none{background:linear-gradient(120deg,var(--raspberry),var(--tangerine));color:var(--plum)}
+.banner.punch{background:transparent;color:var(--lemon);font-style:italic}
+
+/* ── final ── */
+#final .big{
+  font-family:'Caveat',cursive;font-weight:700;font-size:clamp(3rem,12vw,9rem);line-height:.95;margin:0;
+  background:linear-gradient(120deg,var(--pistachio),var(--lemon) 50%,var(--tangerine));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+#final .sub{font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(1.2rem,4vw,2.4rem);margin:.6rem 0 0}
+
+/* ── nav ── */
+.nav{
+  position:fixed;top:50%;transform:translateY(-50%);z-index:6;cursor:pointer;border:0;
+  width:clamp(48px,7vw,72px);height:clamp(48px,7vw,72px);border-radius:50%;
+  background:rgba(255,244,230,.08);color:var(--cream);font-size:clamp(1.6rem,4vw,2.6rem);
+  display:grid;place-items:center;backdrop-filter:blur(6px);transition:background .2s,transform .15s;
+}
+.nav:hover{background:rgba(255,244,230,.18)}
+.nav:active{transform:translateY(-50%) scale(.92)}
+.nav.prev{left:clamp(.6rem,2vw,1.6rem)}
+.nav.next{right:clamp(.6rem,2vw,1.6rem)}
+
+/* ── hint ── */
+#hint{
+  position:fixed;bottom:.9rem;left:0;right:0;text-align:center;z-index:5;
+  font-family:'Fredoka',sans-serif;font-weight:500;font-size:clamp(.72rem,1.5vw,.95rem);
+  color:var(--dim);letter-spacing:.03em;pointer-events:none;
+}
+#hint b{color:var(--cream)}
+
+/* ── candy & confetti ── */
+#candy-layer{position:fixed;inset:0;pointer-events:none;z-index:9;overflow:hidden}
+.candy,.confetti{position:fixed;will-change:transform;pointer-events:none}
+.candy{filter:drop-shadow(0 6px 10px rgba(0,0,0,.3))}
+.confetti{filter:drop-shadow(0 4px 6px rgba(0,0,0,.22))}
+
+/* ── loader ── */
+#loader{
+  position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:2rem;text-align:center;gap:1rem;
+}
+#loader.hidden{display:none}
+#loader h1{font-family:'Caveat',cursive;font-weight:700;font-size:clamp(2.6rem,9vw,6rem);margin:0;color:var(--lemon)}
+#loader p{font-family:'Fredoka',sans-serif;font-weight:500;font-size:clamp(1rem,2.4vw,1.4rem);max-width:32ch;margin:.2rem 0;line-height:1.4}
+#drop{
+  margin-top:.6rem;width:min(520px,90vw);border:2px dashed rgba(255,244,230,.35);border-radius:24px;
+  padding:2rem 1.5rem;background:rgba(255,244,230,.04);cursor:pointer;
+  transition:border-color .2s,background .2s;
+}
+#drop.over{border-color:var(--pistachio);background:rgba(123,211,137,.12)}
+#drop .pick{
+  display:inline-block;margin-top:.8rem;font-family:'Fredoka',sans-serif;font-weight:600;
+  color:var(--plum);background:linear-gradient(120deg,var(--lemon),var(--tangerine));
+  padding:.7rem 1.5rem;border-radius:999px;box-shadow:var(--shadow);
+}
+#err{color:var(--raspberry);font-weight:700;min-height:1.4em}
+#loader input{display:none}
+
+@media(max-width:680px){.options{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.001s!important;transition-duration:.15s!important}
+  #welcome .names{animation:none}
+}
+
+/* ── Personnage Emma sur l'accueil ── */
+#welcome{flex-direction:row;justify-content:center;align-items:center;gap:clamp(1.5rem,5vw,4rem);padding-top:4rem}
+#welcome-text{display:flex;flex-direction:column;align-items:center;text-align:center}
+#emma-char{height:clamp(260px,55vh,580px);width:auto;filter:drop-shadow(0 24px 48px rgba(255,93,143,.22));flex:none;}
+@media(max-width:680px){
+  #welcome{flex-direction:column;gap:0;padding-top:1rem}
+  #emma-char{height:clamp(260px,55vh,580px);width:auto;filter:drop-shadow(0 24px 48px rgba(255,93,143,.22));flex:none;}
+}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="topbar"><span id="counter"></span><span id="dots"></span></div>
+  <div id="voter-badge">👥 <span id="voter-count">0</span> votant(s)</div>
+
+  <!-- QR mini pendant les questions -->
+  <div id="qr-mini">
+    <canvas id="qr-mini-canvas" width="72" height="72"></canvas>
+    <span>voter →</span>
+  </div>
+
+  <!-- 0 : Accueil -->
+  <section class="view show" id="welcome">
+    <img id="emma-char" src="emma.png" alt="Emmanuelle" aria-hidden="true">
+    <div id="welcome-text">
+      <p class="kicker" id="kicker">Le grand quiz de la mariée</p>
+      <h1 class="names" id="couple">Emmanuelle</h1>
+      <p class="title" id="accroche">À vous de jouer !</p>
+      <div class="candies">🍬 🍭 🍫 🍩 🧁</div>
+      <button class="start-btn" id="startBtn">C'est parti</button>
+    </div>
+  </section>
+
+  <!-- 1 : Page QR -->
+  <section class="view" id="qrpage">
+    <p class="qr-title">Votez en direct !</p>
+    <p class="qr-sub">Scannez ce QR code avec votre téléphone</p>
+    <div id="qr-big-wrap"><img id="qr-big" alt="QR code vote"></div>
+    <p class="qr-url" id="qr-url-label">trimegix.github.io/quiz-mariage/vote.html</p>
+    <button class="start-btn" id="qrNextBtn" style="margin-top:.8rem">On commence !</button>
+  </section>
+
+  <!-- 2 : Quiz -->
+  <section class="view" id="quiz">
+    <h2 class="q-text" id="qText"></h2>
+    <div id="vote-pill">🗳️ Vote ouvert</div>
+    <div class="options" id="options"></div>
+    <div id="banners"></div>
+  </section>
+
+  <!-- 3 : Final -->
+  <section class="view" id="final">
+    <h2 class="big" id="finalTitre">Vive les mariés !</h2>
+    <p class="sub" id="finalSous">Bravo à tous, et place à la fête 🎉</p>
+    <button id="export-btn" onclick="exportResults()" style="margin-top:2rem;padding:.8rem 2rem;border-radius:20px;border:none;background:var(--tangerine);color:#2B1B3D;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.2rem;cursor:pointer;">📊 Exporter les résultats</button>
+  </section>
+
+  <button class="nav prev" id="prev" aria-label="Précédent">‹</button>
+  <button class="nav next" id="next" aria-label="Suivant">›</button>
+  <div id="candy-layer"></div>
+</div>
+
+<div id="hint">
+  <b>→</b> Suivant &nbsp;·&nbsp; <b>←</b> Retour &nbsp;·&nbsp; <b>B</b> Bonbons 🍬 &nbsp;·&nbsp; <b>P</b> Plein écran &nbsp;·&nbsp; <b>R</b> Reset votes
+</div>
+
+<section id="loader" class="hidden">
+  <h1>Le grand quiz</h1>
+  <p>Chargez le fichier <b>questions.json</b> pour démarrer.</p>
+  <label id="drop">
+    Glissez <b>questions.json</b> ici
+    <br><span class="pick">ou choisir le fichier</span>
+    <input type="file" id="fileInput" accept=".json,application/json">
+  </label>
+  <p id="err"></p>
+</section>
+
+<script type="module">
+import { initializeApp }            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, onValue, remove }
+                                    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const FB = {
+  apiKey:"AIzaSyDnpff-qO2oz_61-7yvKXLGAcg89oM9wGE",
+  authDomain:"quiz-mariage-4eac8.firebaseapp.com",
+  databaseURL:"https://quiz-mariage-4eac8-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"quiz-mariage-4eac8",
+  storageBucket:"quiz-mariage-4eac8.firebasestorage.app",
+  messagingSenderId:"376344283690",
+  appId:"1:376344283690:web:531a87c67d4f048747d153"
+};
+const db = getDatabase(initializeApp(FB));
+const reduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+// ── URL de vote ───────────────────────────────────────────────────────────────
+const VOTE_URL = (() => {
+  const u = new URL(location.href);
+  u.pathname = u.pathname.replace(/\/[^/]*\.html$/, '/') + 'vote.html';
+  return u.href;
+})();
+
+// ── État ──────────────────────────────────────────────────────────────────────
+// slides : 0=accueil  1=qrpage  2..N+1=questions  N+2=final
+let DATA=null, QUESTIONS=[], N=0;
+let slide=0, step=0, built=-1;
+let dots=[];
+let votesListener=null, currentVotes={}, totalVoters=0, voteOpen=false;
+
+const $  = id => document.getElementById(id);
+const elWelcome=$('welcome'), elQrpage=$('qrpage'), elQuiz=$('quiz'), elFinal=$('final');
+const elQText=$('qText'), elOptions=$('options'), elBanners=$('banners');
+const elTopbar=$('topbar'), elCounter=$('counter'), elDots=$('dots');
+const elVoterBadge=$('voter-badge'), elVoterCount=$('voter-count');
+const elVotePill=$('vote-pill');
+const elQrMini=$('qr-mini');
+const LETTERS=['A','B','C','D','E','F'];
+
+// ── QR codes ──────────────────────────────────────────────────────────────────
+function qrSrc(size){ return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(VOTE_URL)}&bgcolor=FFF4E6&color=2B1B3D&margin=2`; }
+
+function initQR() {
+  // Grand QR sur la page dédiée
+  $('qr-big').src = qrSrc(340);
+  $('qr-url-label').textContent = VOTE_URL.replace(/^https?:\/\//, '');
+  // Mini QR coin bas-gauche
+  const mc = $('qr-mini-canvas');
+  const img = new Image(); img.crossOrigin='anonymous';
+  img.src = qrSrc(72);
+  img.onload = () => { const ctx=mc.getContext('2d'); ctx.clearRect(0,0,72,72); ctx.drawImage(img,0,0,72,72); };
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', boot);
+async function boot() {
+  try {
+    const res = await fetch('questions.json',{cache:'no-store'});
+    if (res.ok) { const j=await res.json(); if(validate(j)){ start(j); return; } }
+  } catch(e){}
+  showLoader();
+}
+function validate(j){ return j && Array.isArray(j.questions) && j.questions.length>0; }
+
+function showLoader() {
+  const loader=$('loader'), drop=$('drop'), input=$('fileInput'), err=$('err');
+  loader.classList.remove('hidden');
+  function handleFile(file) {
+    if(!file) return;
+    const r=new FileReader();
+    r.onload = () => {
+      try {
+        const j=JSON.parse(r.result);
+        if(!validate(j)){ err.textContent="Aucune question trouvée. Vérifiez le format."; return; }
+        loader.classList.add('hidden'); start(j);
+      } catch(e){ err.textContent="JSON invalide. Vérifiez les virgules et guillemets."; }
+    };
+    r.readAsText(file);
+  }
+  input.addEventListener('change',()=>handleFile(input.files[0]));
+  ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
+  ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
+  drop.addEventListener('drop',e=>handleFile(e.dataTransfer.files[0]));
+}
+
+function start(json) {
+  DATA=json; QUESTIONS=json.questions; N=QUESTIONS.length;
+  if(json.couple)         $('couple').innerHTML=json.couple.replace(/&/g,'&amp;');
+  if(json.kicker)         $('kicker').textContent=json.kicker;
+  if(json.accroche)       $('accroche').textContent=json.accroche;
+  if(json.finalTitre)     $('finalTitre').textContent=json.finalTitre;
+  if(json.finalSousTitre) $('finalSous').textContent=json.finalSousTitre;
+  elDots.innerHTML='';
+  QUESTIONS.forEach(()=>{ const d=document.createElement('span'); d.className='dot'; elDots.appendChild(d); });
+  dots=[...elDots.children];
+  initQR();
+  bindControls();
+  slide=0; step=0; built=-1;
+  render();
+}
+
+// ── Firebase ──────────────────────────────────────────────────────────────────
+function qKey(){ return `q${slide-2}`; } // slide 2 = question 0
+
+function openVote() {
+  if(slide<2||slide>N+1) return;
+  voteOpen=true;
+  elVotePill.classList.add('show');
+  const qIdx = slide-2;
+  set(ref(db,'state/currentQuestion'), qIdx);
+  set(ref(db,'state/voteOpen'), true);
+  set(ref(db,'state/options'), QUESTIONS[qIdx].options);
+  if(votesListener){ votesListener(); votesListener=null; }
+  votesListener = onValue(ref(db,`votes/${qKey()}`), snap => {
+    currentVotes={}; totalVoters=0;
+    if(snap.exists()) snap.forEach(v=>{
+      const val=v.val();
+      totalVoters++;
+      // val peut être un entier (1 réponse) ou un tableau (multi)
+      const indices = Array.isArray(val) ? val : (typeof val==='number' ? [val] : []);
+      indices.forEach(idx=>{ currentVotes[idx]=(currentVotes[idx]||0)+1; });
+    });
+    elVoterCount.textContent=totalVoters;
+    elVoterBadge.classList.toggle('show', totalVoters>0);
+    updateBars();
+  });
+}
+
+function closeVote() {
+  if(!voteOpen) return;   // ← ne rien écrire si déjà fermé
+  voteOpen=false;
+  elVotePill.classList.remove('show');
+  set(ref(db,'state/voteOpen'), false);
+}
+
+function updateBars() {
+  [...elOptions.children].forEach((o,idx)=>{
+    const count=currentVotes[idx]||0;
+    const pct=totalVoters>0?(count/totalVoters)*100:0;
+    const bar=o.querySelector('.opt-bar'); if(bar) bar.style.width=pct.toFixed(1)+'%';
+    const stat=o.querySelector('.vote-stat');
+    if(stat){
+      stat.textContent=totalVoters>0?`${count} vote${count>1?'s':''} · ${pct.toFixed(0)}%`:'';
+      stat.classList.toggle('show',totalVoters>0);
+    }
+  });
+  elVoterCount.textContent=totalVoters;
+}
+
+async function resetVotes() {
+  await remove(ref(db,'votes'));
+  await set(ref(db,'state/voteOpen'),false);
+  currentVotes={}; totalVoters=0;
+  updateBars();
+  elVoterBadge.classList.remove('show');
+}
+
+// ── Rendu ─────────────────────────────────────────────────────────────────────
+// slide 0          → accueil
+// slide 1          → page QR
+// slide 2..N+1     → question (slide-2 = index dans QUESTIONS)
+// slide N+2        → final
+function isQuestionSlide(){ return slide>=2 && slide<=N+1; }
+function maxStep(q){ return q.options.length + 2; }
+// step 0 = question seule
+// step 1..n = options une à une
+// step n+1 = vote ouvert
+// step n+2 = révélation
+
+function show(view){ [elWelcome,elQrpage,elQuiz,elFinal].forEach(v=>v.classList.remove('show')); view.classList.add('show'); }
+
+function buildQuestion(i) {
+  const q=QUESTIONS[i];
+  elQText.textContent=q.q; elQText.classList.remove('in');
+  elOptions.innerHTML=''; elBanners.innerHTML='';
+  q.options.forEach((opt,idx)=>{
+    const card=document.createElement('div'); card.className='opt';
+    card.innerHTML=`<div class="opt-bar"></div><div class="opt-inner"><span class="badge">${LETTERS[idx]||'?'}</span><div class="opt-right"><span class="label"></span><span class="vote-stat"></span></div></div>`;
+    card.querySelector('.label').textContent=opt;
+    elOptions.appendChild(card);
+  });
+  built=i; currentVotes={}; totalVoters=0;
+  // Signaler la nouvelle question à Firebase (sans options — elles ne sont envoyées qu'à openVote)
+  set(ref(db,'state/currentQuestion'), i);
+  set(ref(db,'state/voteOpen'), false);
+}
+
+function applyStep() {
+  const q=QUESTIONS[slide-2];
+  const opts=[...elOptions.children];
+  const nOpts=q.options.length;
+  // step 0                    : question seule
+  // step 1..nOpts             : options une à une
+  // step nOpts+1              : vote ouvert (toutes les options visibles)
+  // step nOpts+2 (=maxStep)   : révélation
+
+  void elQText.offsetWidth; elQText.classList.add('in');
+
+  // Options
+  opts.forEach((o,idx)=>{
+    o.classList.toggle('in', step>=1 && idx<=(step-1));
+    o.classList.remove('correct','faded');
+  });
+
+  // Vote
+  const voteStep = nOpts+1;
+  const revealStep = nOpts+2;
+
+  if(step===voteStep && !voteOpen) openVote();
+  if(step<voteStep) closeVote();
+  if(step>=voteStep) updateBars();
+
+  // Révélation
+  elBanners.innerHTML='';
+  if(step>=revealStep){
+    closeVote();
+    const correct=Array.isArray(q.correct)?q.correct:[];
+    if(correct.length===0){
+      opts.forEach(o=>o.classList.add('faded'));
+      addBanner('Aucune bonne réponse 🤷','none');
+    } else {
+      opts.forEach((o,idx)=>o.classList.add(correct.includes(idx)?'correct':'faded'));
+      const msg=correct.length===nOpts?'Les '+nOpts+' sont vraies 🎉':correct.length>1?'Plusieurs bonnes réponses 🎉':'Bonne réponse 🎉';
+      addBanner(msg,'good');
+    }
+    if(q.punch) addBanner(q.punch,'punch');
+    updateBars();
+  }
+}
+
+function addBanner(text,kind){
+  const b=document.createElement('div'); b.className='banner '+kind; b.textContent=text;
+  elBanners.appendChild(b);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>b.classList.add('in')));
+}
+
+function updateTopbar(){
+  if(isQuestionSlide()){
+    elTopbar.classList.add('show');
+    elCounter.textContent='Question '+(slide-1)+' / '+N;
+    dots.forEach((d,i)=>{ d.classList.toggle('active',i===slide-2); d.classList.toggle('done',i<slide-2); });
+  } else elTopbar.classList.remove('show');
+}
+
+function render(){
+  updateTopbar();
+  elQrMini.classList.toggle('show', isQuestionSlide());
+  if(slide===0){ closeVote(); show(elWelcome); return; }
+  if(slide===1){ closeVote(); show(elQrpage); return; }
+  if(slide===N+2){ closeVote(); show(elFinal); return; }
+  show(elQuiz);
+  if(built!==slide-2) buildQuestion(slide-2);
+  applyStep();
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+function next(){
+  if(slide===0){ slide=1; render(); return; }
+  if(slide===1){ slide=2; step=0; render(); return; }
+  if(slide===N+2) return;
+  const ms=maxStep(QUESTIONS[slide-2]);
+  if(step<ms){ step++; render(); if(step===ms) revealCelebration(); }
+  else{ slide++; step=0; render(); if(slide===N+2) finalCelebration(); }
+}
+function prev(){
+  if(slide===0) return;
+  if(slide===1){ slide=0; render(); return; }
+  if(votesListener){ votesListener(); votesListener=null; }
+  closeVote();
+  if(slide===N+2){ slide=N+1; step=maxStep(QUESTIONS[slide-2]); render(); return; }
+  if(step>0){ step--; render(); return; }
+  slide--;
+  if(slide===1){ render(); return; }
+  step=maxStep(QUESTIONS[slide-2]); render();
+}
+
+// ── Candy & confetti ──────────────────────────────────────────────────────────
+const CANDIES=['🍬','🍭','🍫','🍩','🧁','🍪','🍓'];
+const CONFETTIS=['#FF5D8F','#FF9F45','#7BD389','#FFD93D','#FFF4E6'];
+const layer=$('candy-layer');
+function throwCandies(n){
+  n=Math.min(reduced?8:n||28, 60);
+  const W=innerWidth,H=innerHeight,cx=W/2,cy=H*.6;
+  for(let i=0;i<n;i++){
+    const s=document.createElement('span'); s.className='candy';
+    s.textContent=CANDIES[(Math.random()*CANDIES.length)|0];
+    s.style.cssText=`left:${cx}px;top:${cy}px;font-size:${1.6+Math.random()*2.1}rem`;
+    layer.appendChild(s);
+    const ang=-Math.PI/2+(Math.random()-.5)*Math.PI*1.3;
+    const dx=Math.cos(ang)*(W*.45+Math.random()*W*.55);
+    const apex=(0.45+Math.random()*.55)*H, fallY=H*.85+Math.random()*240;
+    const spin=Math.random()*900-450, dur=1300+Math.random()*900;
+    const a=s.animate([
+      {transform:`translate(-50%,-50%) scale(.3) rotate(0deg)`,opacity:1,offset:0},
+      {transform:`translate(calc(-50% + ${dx*.5}px),calc(-50% - ${apex}px)) scale(1.15) rotate(${spin*.5}deg)`,opacity:1,offset:.45},
+      {transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${fallY}px)) scale(.9) rotate(${spin}deg)`,opacity:0,offset:1}
+    ],{duration:dur,easing:'cubic-bezier(.2,.7,.3,1)',fill:'forwards'});
+    a.onfinish=()=>s.remove();
+  }
+}
+function confettiBurst(n){
+  n=Math.min(reduced?16:n||70,200);
+  const W=innerWidth,H=innerHeight,cx=W/2,cy=H*.42;
+  for(let i=0;i<n;i++){
+    const c=document.createElement('span'); c.className='confetti';
+    c.style.cssText=`left:${cx}px;top:${cy}px;width:${6+Math.random()*8}px;height:${9+Math.random()*11}px;background:${CONFETTIS[(Math.random()*CONFETTIS.length)|0]};border-radius:${Math.random()<.4?'50%':'2px'}`;
+    layer.appendChild(c);
+    const ang=Math.random()*Math.PI*2;
+    const dx=Math.cos(ang)*(120+Math.random()*W*.4);
+    const up=-(80+Math.random()*240), fallY=H*.8+Math.random()*260, drift=(Math.random()-.5)*140;
+    const spin=Math.random()*1080-540, dur=1500+Math.random()*1300;
+    const a=c.animate([
+      {transform:`translate(-50%,-50%) rotate(0deg)`,opacity:1,offset:0},
+      {transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${up}px)) rotate(${spin*.4}deg)`,opacity:1,offset:.35},
+      {transform:`translate(calc(-50% + ${dx+drift}px),calc(-50% + ${fallY}px)) rotate(${spin}deg)`,opacity:0,offset:1}
+    ],{duration:dur,easing:'cubic-bezier(.15,.6,.3,1)',fill:'forwards'});
+    a.onfinish=()=>c.remove();
+  }
+}
+function revealCelebration(){ confettiBurst(72); throwCandies(16); }
+function finalCelebration(){  confettiBurst(150); throwCandies(46); }
+
+// ── Export résultats ──────────────────────────────────────────────────────────
+async function exportResults(){
+  const btn = document.getElementById('export-btn');
+  btn.textContent = '⏳ Chargement…';
+  btn.disabled = true;
+
+  try {
+    const { get, ref: fbRef } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js");
+    const snap = await get(fbRef(db, 'votes'));
+
+    if (!snap.exists()) {
+      alert('Aucun vote trouvé dans Firebase.');
+      btn.textContent = '📊 Exporter les résultats';
+      btn.disabled = false;
+      return;
+    }
+
+    const votesData = snap.val(); // { q0: { prenom_xxx: 2, ... }, q1: {...}, ... }
+
+    // Collecter tous les votants uniques
+    const allVoters = new Set();
+    Object.values(votesData).forEach(q => Object.keys(q).forEach(k => allVoters.add(k)));
+
+    // Construire la table : lignes = votants, colonnes = questions
+    const voters = [...allVoters].sort();
+    const nQ = QUESTIONS.length;
+
+    // Ligne d'en-tête
+    const header = ['Votant', ...QUESTIONS.map((q,i) => `Q${i+1}: ${q.q.slice(0,40)}`)];
+
+    // Lignes de données
+    const rows = voters.map(v => {
+      // Extraire le prénom lisible (tout avant le dernier _xxxx)
+      const displayName = v.replace(/_[a-z0-9]{4}$/, '').replace(/_/g, ' ');
+      const cols = [displayName];
+      for (let i = 0; i < nQ; i++) {
+        const qVotes = votesData[`q${i}`] || {};
+        const val = qVotes[v];
+        if (val === undefined) {
+          cols.push('—');
+        } else if (Array.isArray(val)) {
+          // Multi-sélection : afficher toutes les réponses séparées par " + "
+          cols.push(val.map(idx => QUESTIONS[i].options[idx] || `Option ${idx+1}`).join(' + '));
+        } else {
+          cols.push(QUESTIONS[i].options[val] || `Option ${val+1}`);
+        }
+      }
+      return cols;
+    });
+
+    // Générer le CSV
+    const csvLines = [header, ...rows].map(row =>
+      row.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(';')
+    );
+    const csvContent = '\uFEFF' + csvLines.join('\n'); // BOM pour Excel
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'resultats_quiz_mariage.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    btn.textContent = '✅ Téléchargé !';
+    setTimeout(() => { btn.textContent = '📊 Exporter les résultats'; btn.disabled = false; }, 3000);
+
+  } catch(e) {
+    console.error(e);
+    alert('Erreur lors de l\'export : ' + e.message);
+    btn.textContent = '📊 Exporter les résultats';
+    btn.disabled = false;
+  }
+}
+
+// ── Contrôles ─────────────────────────────────────────────────────────────────
+function bindControls(){
+  $('next').addEventListener('click',next);
+  $('prev').addEventListener('click',prev);
+  $('startBtn').addEventListener('click',next);
+  $('qrNextBtn').addEventListener('click',next);
+  window.addEventListener('keydown',e=>{
+    if(!$('loader').classList.contains('hidden')) return;
+    switch(e.key){
+      case 'ArrowRight': case ' ': case 'Enter': case 'PageDown': e.preventDefault(); next(); break;
+      case 'ArrowLeft':  case 'Backspace': case 'PageUp':         e.preventDefault(); prev(); break;
+      case 'b': case 'B': throwCandies(34); break;
+      case 'p': case 'P': case 'f': case 'F':
+        document.fullscreenElement?document.exitFullscreen?.():document.documentElement.requestFullscreen?.(); break;
+      case 'r': case 'R': resetVotes(); break;
+      case 'Home': slide=0; step=0; render(); break;
+    }
+  });
+}
+</script>
+</body>
+</html>

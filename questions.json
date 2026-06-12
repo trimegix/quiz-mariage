@@ -1,0 +1,160 @@
+{
+  "_lisezmoi": {
+    "comment": "Modifiez librement le contenu. Pour chaque question, correct est la liste des bonnes reponses par leur numero (0 = la 1re proposition).",
+    "exemples_correct": {
+      "[1]": "la 2e proposition est juste",
+      "[0,1,2,3]": "les 4 sont vraies",
+      "[]": "aucune n'est bonne"
+    },
+    "a_completer": "Les propositions contenant [A COMPLETER] attendent une vraie info de votre part. Les questions a verifier sont signalees dans le champ note (ignore par le quiz)."
+  },
+
+  "couple": "Emmanuelle",
+  "kicker": "Le grand quiz de la mariée",
+  "accroche": "À vous de jouer !",
+  "finalTitre": "Vive les mariés !",
+  "finalSousTitre": "Nous vous souhaitons beaucoup d'amour 💛",
+
+  "questions": [
+    {
+      "q": "Quels chocolats ont la préférence d'Emmanuelle ?",
+      "options": [
+        "Les Kinder Bueno",
+        "Les chocolats d'Alain Ducasse",
+        "Les Shokobons",
+        "Question piège : elle n'aime pas le chocolat !"
+      ],
+      "correct": [2],
+      "punch": "Et voilà de quoi nourrir la foule en délire 🍬"
+    },
+    {
+      "q": "À partir de quelle température Emmanuelle se baigne-t-elle ?",
+      "options": [
+        "18°C, à Belle-Île-en-Mer, quand c'est l'été",
+        "10°C, à Belle-Île-en-Mer, quand c'est l'hiver",
+        "8°C, à Perros-Guirec... quand c'est l'été !",
+        "Aucune. Emma n'a aucune limite"
+      ],
+      "correct": [3],
+      "punch": "Elle se baignerait dans un glaçon si c'était possible"
+    },
+    {
+      "q": "Combien de frères et sœurs Emmanuelle a-t-elle ?",
+      "options": [
+        "Aucun",
+        "[À COMPLÉTER] en comptant les demi-frères et sœurs",
+        "[À COMPLÉTER] en comptant aussi les enfants des conjoints (Louis & co)",
+        "Personne ne le sait exactement"
+      ],
+      "correct": [0, 1, 2, 3],
+      "punch": "Ca dépend du point de vue ! Un arbre généalogique est à l'entrée pour les curieux."
+    },
+    {
+      "q": "Qu'est-ce qui a d'abord séduit Emmanuelle chez Olivier ?",
+      "options": [
+        "Il est quand même très beau avec ses yeux bleus",
+        "10 ans d'expérience comme mono de colo, il va me faire plein d'enfants",
+        "Il sait 'TOUT' faire, je n'aurai pas toujours besoin de travailler",
+        "Il me nourrit quand même très bien"
+      ],
+      "correct": [0, 1, 2, 3],
+      "punch": "Bien sûr !"
+    },
+    {
+      "q": "Combien de temps Emmanuelle et Olivier ont-ils été fiancés ?",
+      "options": [
+        "1 an",
+        "7 ans",
+        "10 ans",
+        "Juste assez de temps avant que les courbes ne divergent"
+      ],
+      "correct": [1],
+      "punch": "N'importe quoi la théorie d'Olivier"
+    },
+    {
+      "q": "Pour ceux qui l'ignorent, Emma a un talent divinatoire. Qu'est-ce qu'elle n'a pourtant su deviner ?",
+      "options": [
+        "Elle nous connait tellement bien qu'elle devine les prénoms de nos futurs enfants",
+        "En maitre footix elle a su en avance que le PSG allait faire le back-to-back",
+        "Ses notes du bac",
+        "La date de son mariage"
+      ],
+      "correct": [3],
+      "punch": "A peu de choses près, Madame Emma = Madame Irma"
+    },
+    {
+      "q": "Emmanuelle entretient une relation particulière avec l'Allemagne. Qu'est-ce qu'elle aime le moins ?",
+      "options": [
+        "Sa langue. Une maitrise parfaite, supérieure à ceux qui y ont vécu 8 ans et qui sont en couple avec une prof d'allemand",
+        "Ses bières, passion forgée auprès des oktoberfest, des rayons Monoprix et d'Olivier",
+        "Ses meilleures soirées et weekends berlinois",
+        "Sa gastronomie, currywurst, kebab et légumes insipides"
+      ],
+      "correct": [0],
+      "punch": "Naturlich ! Didier parle évidemment mieux allemand qu'elle"
+    },
+    {
+      "q": "Quel est le déficit de la balance des paiements d'Emma ?",
+      "options": [
+        "0€ : un sou est un sou et les bons comptes font les bons amis",
+        "-1.000€ : c'est toujours elle qui avance l'argent  et elle a beau nous courir après, elle n'a pas tout récupéré",
+        "+1.000€ : On finit par la rembourser... mais prend-elle des intérêts au passage ?",
+        "Il faut demander à Olivier, c'est lui le financier du couple"
+      ],
+      "correct": [1],
+      "punch": "Le doute subsiste..."
+    },
+    {
+      "q": "Emmanuelle sort de Monoprix avec ~10 articles d'une valeur de 36€. Pourtant elle n'a payé que 25€. Comment ?",
+      "options": [
+        "La carte employés : -20%, dix ans chez Monoprix, on apprend à s'en servir",
+        "La chasse aux bonnes affaires : elle connaît tous les prix, toutes les promos et un sou est un sou",
+        "Un oubli : entre les enfants et les courses, ça arrive",
+        "Une revendication : après toutes ces heures à subir les chefs, elle peut bien se payer un peu en nature !"
+      ],
+      "correct": [3],
+      "note": "Oooooh ! Pas beau !"
+    },
+    {
+      "q": "Quelle est la chose la plus improbable qu'Emma ait faite en vacances avec nous ?",
+      "options": [
+        "Danser la Dabkeh avec des Bédouins dans le désert jordanien",
+        "Finir sur une scène de karaoké à chanter du Céline Dion à Hanoï",
+        "Partir à New-York sur un coup de tête"
+      ],
+      "correct": [3]
+    },
+    {
+      "q": "Quel aurait pu être le métier d'Emma dans une autre vie ?",
+      "options": [
+        "Conductrice de train japonais : une ponctualité infaillible, l'heure c'est l'heure !",
+        "Sage-femme : toujours là pour prendre soin des autres",
+        "Voyante : voir la question sur ses prémonitions",
+        "Pleureuse égyptienne : la larme facile, pour les petits et grands bonheurs, surtout ceux des autres"
+      ],
+      "correct": [0, 1, 2, 3],
+      "punch": "Mais aujourd'hui, c'est nous qui sommes émus de votre bonheur."
+    },
+    {
+      "q": "Quelles sont les qualités qu'on préfère chez Emmanuelle ?",
+      "options": [
+        "Sa patience : 7 ans de fiançailles, il ne fallait pas être pressée",
+        "Sa modestie : seulement 3 enfants, c'est peu pour une Baudevin",
+        "Sa gentillesse : passion des câlins en soirée",
+        "Sa générosité : tous les efforts pour les gens qu'elle aime"
+      ],
+      "correct": [0, 1, 2, 3],
+      "punch": "Toutes ces qualités 💛"
+    },
+    {
+      "q": "Isa a retrouvé un sms vieux de 10 ans d'Emma, qui revenait d'un examen cardiaque. Qu'avait-elle répondu à «comment ça s'est passé ?»",
+      "options": [
+        "«Ça va moyen, je dois retourner faire d'autres examens»",
+        "«Pour mon cœur ce n'est rien : c'était mon cœur qui s'emballait pour Olivier :)»",
+        "«Ce n'est finalement rien, ça doit être Olivier qui m'énerve»",
+        "La réponse D"
+      ],
+      "correct": [1]
+    }
+  ]
+}
