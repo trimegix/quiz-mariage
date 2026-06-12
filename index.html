@@ -288,6 +288,17 @@ body{
   #welcome{flex-direction:column;gap:0;padding-top:1rem}
   #emma-char{height:clamp(260px,55vh,580px);width:auto;filter:drop-shadow(0 24px 48px rgba(255,93,143,.22));flex:none;}
 }
+
+/* ── leaderboard ── */
+#final{overflow-y:auto}
+#leaderboard{width:min(500px,92vw);text-align:left;margin-top:1.2rem}
+#leaderboard h3{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(1.1rem,2.8vw,1.6rem);margin:0 0 .7rem;color:var(--lemon);text-align:center}
+.lb-row{display:flex;align-items:center;gap:.7rem;padding:.55rem .9rem;border-radius:14px;background:var(--panel);margin-bottom:.4rem;border:1.5px solid rgba(255,244,230,.08)}
+.lb-rank{font-size:1.3rem;width:2rem;text-align:center;flex:none}
+.lb-name{flex:1;font-weight:700;font-size:clamp(.9rem,2vw,1.1rem);text-transform:capitalize}
+.lb-bar-wrap{width:70px;height:7px;background:rgba(255,244,230,.12);border-radius:4px;overflow:hidden;flex:none}
+.lb-bar{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--raspberry),var(--tangerine));transition:width .8s cubic-bezier(.4,0,.2,1)}
+.lb-score{font-family:'Fredoka',sans-serif;font-weight:700;font-size:clamp(.85rem,1.8vw,1rem);color:var(--lemon);white-space:nowrap}
 </style>
 </head>
 <body>
@@ -335,6 +346,7 @@ body{
     <h2 class="big" id="finalTitre">Vive les mariés !</h2>
     <p class="sub" id="finalSous">Bravo à tous, et place à la fête 🎉</p>
     <button id="export-btn" onclick="exportResults()" style="margin-top:2rem;padding:.8rem 2rem;border-radius:20px;border:none;background:var(--tangerine);color:#2B1B3D;font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.2rem;cursor:pointer;">📊 Exporter les résultats</button>
+    <div id="leaderboard"></div>
   </section>
 
   <button class="nav prev" id="prev" aria-label="Précédent">‹</button>
@@ -359,7 +371,7 @@ body{
 
 <script type="module">
 import { initializeApp }            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, set, update, onValue, remove }
+import { getDatabase, ref, set, update, get, onValue, remove }
                                     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const FB = {
@@ -679,7 +691,55 @@ function confettiBurst(n){
   }
 }
 function revealCelebration(){ confettiBurst(72); throwCandies(16); }
-function finalCelebration(){  confettiBurst(150); throwCandies(46); }
+function finalCelebration(){  confettiBurst(150); throwCandies(46); showLeaderboard(); }
+
+// ── Leaderboard ───────────────────────────────────────────────────────────────
+async function computeLeaderboard() {
+  const snap = await get(ref(db,'votes'));
+  if(!snap.exists()) return [];
+  const votesData = snap.val();
+  const scores={}, names={};
+  for(let i=0;i<QUESTIONS.length;i++){
+    const q=QUESTIONS[i];
+    const correct=Array.isArray(q.correct)?q.correct:[];
+    const nCorrect=correct.length;
+    const nWrong=q.options.length-nCorrect;
+    const qVotes=votesData[`q${i}`]||{};
+    for(const [key,val] of Object.entries(qVotes)){
+      if(!names[key]) names[key]=key.replace(/_[a-z0-9]{4}$/,'').replace(/_/g,' ');
+      const selected=Array.isArray(val)?val:(typeof val==='number'?[val]:[]);
+      let s=0;
+      if(nCorrect>0){
+        const hits=selected.filter(idx=>correct.includes(idx)).length;
+        const misses=selected.filter(idx=>!correct.includes(idx)).length;
+        s=Math.max(0, hits/nCorrect - (nWrong>0?misses/nWrong:0));
+      }
+      scores[key]=(scores[key]||0)+s;
+    }
+  }
+  const N=QUESTIONS.length;
+  return Object.entries(scores)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,5)
+    .map(([key,score])=>({name:names[key],score,pct:score/N}));
+}
+
+async function showLeaderboard(){
+  const lb=$('leaderboard');
+  lb.innerHTML='';
+  const top=await computeLeaderboard();
+  if(!top.length) return;
+  const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
+  const h3=document.createElement('h3'); h3.textContent='🏆 Top 5'; lb.appendChild(h3);
+  top.forEach(({name,score,pct},i)=>{
+    const row=document.createElement('div'); row.className='lb-row';
+    row.innerHTML=`<span class="lb-rank">${medals[i]}</span><span class="lb-name">${name}</span><div class="lb-bar-wrap"><div class="lb-bar" style="width:0%"></div></div><span class="lb-score">${score.toFixed(1)}&thinsp;/&thinsp;${QUESTIONS.length}</span>`;
+    lb.appendChild(row);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      row.querySelector('.lb-bar').style.width=(pct*100).toFixed(1)+'%';
+    }));
+  });
+}
 
 // ── Export résultats ──────────────────────────────────────────────────────────
 async function exportResults(){
