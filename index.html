@@ -359,7 +359,7 @@ body{
 
 <script type="module">
 import { initializeApp }            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, set, onValue, remove }
+import { getDatabase, ref, set, update, onValue, remove }
                                     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const FB = {
@@ -467,9 +467,7 @@ function openVote() {
   voteOpen=true;
   elVotePill.classList.add('show');
   const qIdx = slide-2;
-  set(ref(db,'state/currentQuestion'), qIdx);
-  set(ref(db,'state/voteOpen'), true);
-  set(ref(db,'state/options'), QUESTIONS[qIdx].options);
+  update(ref(db,'state'), { currentQuestion: qIdx, voteOpen: true, options: QUESTIONS[qIdx].options });
   if(votesListener){ votesListener(); votesListener=null; }
   votesListener = onValue(ref(db,`votes/${qKey()}`), snap => {
     currentVotes={}; totalVoters=0;
