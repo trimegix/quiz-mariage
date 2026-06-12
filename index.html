@@ -77,7 +77,7 @@ body{
 }
 #welcome .names{
   font-family:'Caveat',cursive;font-weight:700;line-height:.92;
-  font-size:clamp(3.4rem,14vw,11rem);margin:0;
+  font-size:clamp(3.4rem,14vw,11rem);margin:0;padding-right:50px;
   background:linear-gradient(120deg,var(--raspberry),var(--tangerine) 45%,var(--lemon));
   -webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 10px 30px rgba(255,93,143,.25));
@@ -91,7 +91,7 @@ body{
 #qrpage{gap:clamp(1rem,3vh,2rem)}
 #qrpage .qr-title{
   font-family:'Caveat',cursive;font-weight:700;
-  font-size:clamp(2.8rem,10vw,7rem);line-height:1;margin:0;
+  font-size:clamp(2.8rem,10vw,7rem);line-height:1;margin:0;padding-right:50px;
   background:linear-gradient(120deg,var(--raspberry),var(--tangerine) 50%,var(--lemon));
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
@@ -220,7 +220,7 @@ body{
 
 /* ── final ── */
 #final .big{
-  font-family:'Caveat',cursive;font-weight:700;font-size:clamp(3rem,12vw,9rem);line-height:.95;margin:0;
+  font-family:'Caveat',cursive;font-weight:700;font-size:clamp(3rem,12vw,9rem);line-height:.95;margin:0;padding-right:50px;
   background:linear-gradient(120deg,var(--pistachio),var(--lemon) 50%,var(--tangerine));
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
@@ -258,7 +258,7 @@ body{
   align-items:center;justify-content:center;padding:2rem;text-align:center;gap:1rem;
 }
 #loader.hidden{display:none}
-#loader h1{font-family:'Caveat',cursive;font-weight:700;font-size:clamp(2.6rem,9vw,6rem);margin:0;color:var(--lemon)}
+#loader h1{font-family:'Caveat',cursive;font-weight:700;font-size:clamp(2.6rem,9vw,6rem);margin:0;color:var(--lemon);padding-right:50px}
 #loader p{font-family:'Fredoka',sans-serif;font-weight:500;font-size:clamp(1rem,2.4vw,1.4rem);max-width:32ch;margin:.2rem 0;line-height:1.4}
 #drop{
   margin-top:.6rem;width:min(520px,90vw);border:2px dashed rgba(255,244,230,.35);border-radius:24px;
@@ -325,7 +325,7 @@ body{
     <img id="emma-char" src="emma.png" alt="Emmanuelle" aria-hidden="true">
     <div id="welcome-text">
       <p class="kicker" id="kicker">Le grand quiz de la mariée</p>
-      <h1 class="names" id="couple" style="padding-right:50px">Emmanuelle</h1>
+      <h1 class="names" id="couple">Emmanuelle</h1>
       <p class="title" id="accroche">À vous de jouer !</p>
       <div class="candies">🍬 🍭 🍫 🍩 🧁</div>
       <button class="start-btn" id="startBtn">C'est parti</button>
