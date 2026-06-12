@@ -538,9 +538,7 @@ function buildQuestion(i) {
     elOptions.appendChild(card);
   });
   built=i; currentVotes={}; totalVoters=0;
-  // Signaler la nouvelle question à Firebase (sans options — elles ne sont envoyées qu'à openVote)
-  set(ref(db,'state/currentQuestion'), i);
-  set(ref(db,'state/voteOpen'), false);
+  update(ref(db,'state'), { currentQuestion: i, voteOpen: false, options: [] });
 }
 
 function applyStep() {
@@ -614,7 +612,12 @@ function render(){
 // ── Navigation ────────────────────────────────────────────────────────────────
 function next(){
   if(slide===0){ slide=1; render(); return; }
-  if(slide===1){ slide=2; step=0; render(); return; }
+  if(slide===1){
+    slide=2; step=0;
+    remove(ref(db,'votes'));
+    set(ref(db,'state'), { currentQuestion: -1, voteOpen: false, options: [] });
+    render(); return;
+  }
   if(slide===N+2) return;
   const ms=maxStep(QUESTIONS[slide-2]);
   if(step<ms){ step++; render(); if(step===ms) revealCelebration(); }
