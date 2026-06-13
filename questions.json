@@ -112,7 +112,8 @@
         "Finir sur une scène de karaoké à chanter du Céline Dion à Hanoï",
         "Partir à New-York sur un coup de tête"
       ],
-      "correct": [3]
+      "correct": [1],
+      "punch": "Elle a sans doute bien fait d'esquiver !"
     },
     {
       "q": "Quel aurait pu être le métier d'Emma dans une autre vie ?",
