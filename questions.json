@@ -25,7 +25,7 @@
         "Question piège : elle n'aime pas le chocolat !"
       ],
       "correct": [2],
-      "punch": "Et voilà de quoi nourrir la foule en délire 🍬"
+      "punch": "C'est peut-être pas ses préférés, mais voilà de quoi vous nourrir 🍬"
     },
     {
       "q": "À partir de quelle température Emmanuelle se baigne-t-elle ?",
@@ -54,51 +54,40 @@
       "options": [
         "Il est quand même très beau avec ses yeux bleus",
         "10 ans d'expérience comme mono de colo, il va me faire plein d'enfants",
-        "Il sait 'TOUT' faire, je n'aurai pas toujours besoin de travailler",
-        "Il me nourrit quand même très bien"
+        "Il a une belle fiche de paye",
+        "Il sait 'TOUT' faire... et notamment il me nourrit quand même très bien"
       ],
       "correct": [0, 1, 2, 3],
       "punch": "Bien sûr !"
-    },
-    {
-      "q": "Combien de temps Emmanuelle et Olivier ont-ils été fiancés ?",
-      "options": [
-        "1 an",
-        "7 ans",
-        "10 ans",
-        "Juste assez de temps avant que les courbes ne divergent"
-      ],
-      "correct": [1],
-      "punch": "N'importe quoi la théorie d'Olivier"
     },
     {
       "q": "Pour ceux qui l'ignorent, Emma a un talent divinatoire. Qu'est-ce qu'elle n'a pas su deviner ?",
       "options": [
         "Elle nous connait tellement bien qu'elle devine les prénoms de nos futurs enfants",
         "En maitre footix elle a su en avance que le PSG allait faire le back-to-back",
-        "Ses notes du bac",
-        "La date de son mariage"
+        "Les notes de son bac",
+        "La date de son mariage !"
       ],
       "correct": [3],
       "punch": "A peu de choses près, Madame Emma = Madame Irma"
     },
     {
-      "q": "Emmanuelle entretient une relation particulière avec l'Allemagne. Qu'est-ce qu'elle aime le moins ?",
+      "q": "Emmanuelle est germanophile. Une des propositions suivantes n'est pourtant plus 'actualité.",
       "options": [
-        "Sa langue. En a-t-elle une maitrise supérieure à ceux qui y ont vécu 8 ans et qui sont en couple avec une prof d'allemand ?",
-        "Ses bières, passion forgée auprès des oktoberfest, des rayons Monoprix et d'Olivier",
-        "Ses meilleures soirées et weekends berlinois",
-        "Sa gastronomie, currywurst, kebab et légumes insipides"
+        "Elle maitrise parfaitement la langue de Goethe... mieux que ceux qui sont en couple avec un.e allemand.e",
+        "Elle aime ses bières, passion forgée grâce aux oktoberfest munichois, et aux rayons Monoprix",
+        "Elle va en pélerinage annuel à Berlin - plus sympa en soirée que Mannheim",
+        "Elle apprécie quand même la gastronomie locale, seul endroit ou elle y mange des kebabs"
       ],
       "correct": [0],
-      "punch": "Naturlich ! Didier parle évidemment mieux allemand qu'elle"
+      "punch": "Naturlich ! Didier parle dorénavant mieux allemand qu'elle"
     },
     {
-      "q": "Quel est le déficit de la balance des paiements d'Emma ?",
+      "q": "Quel est l'état de la balance des paiements d'Emma ?",
       "options": [
-        "0€ : un sou est un sou et les bons comptes font les bons amis",
-        "-1.000€ : c'est toujours elle qui avance l'argent  et elle a beau nous courir après, elle n'a pas tout récupéré",
-        "+1.000€ : On finit par la rembourser... mais prend-elle des intérêts au passage ?",
+        "A l'équilibre, c'est la reine du Tricount et les bons comptes font les bons amis",
+        "Déficitaire : c'est toujours elle qui avance l'argent  et elle n'a pas tout récupéré",
+        "Excédentaire: On finit par la rembourser... mais prend-elle des intérêts au passage ?",
         "Il faut demander à Olivier, c'est lui le financier du couple"
       ],
       "correct": [1],
@@ -116,9 +105,9 @@
       "punch": "Oooooh ! Pas beau !"
     },
     {
-      "q": "Quelle est la chose la plus improbable qu'Emma ait faite en vacances avec nous ?",
+      "q": "Quelle est la chose improbable qu'Emma n'a jamais faite en vacances ?",
       "options": [
-        "Danser jusqu'à l'aube dans une piscine vide à une soirée trans",
+        "Danser jusqu'à l'aube dans une piscine vide à une soirée queer",
         "Danser la Dabkeh avec des Bédouins dans le désert jordanien",
         "Finir sur une scène de karaoké à chanter du Céline Dion à Hanoï",
         "Partir à New-York sur un coup de tête"
@@ -130,7 +119,7 @@
       "options": [
         "Conductrice de train japonais : une ponctualité infaillible, l'heure c'est l'heure !",
         "Sage-femme : toujours là pour prendre soin des autres",
-        "Voyante : on vous a déjà dit qu'elle a un talent divinatoire !",
+        "Voyante : Histoire de monnayer son talent divinatoire !",
         "Pleureuse égyptienne : la larme facile, pour les petits et grands bonheurs, surtout ceux des autres"
       ],
       "correct": [0, 1, 2, 3],
@@ -140,7 +129,7 @@
       "q": "Quelles sont les qualités qu'on préfère chez Emmanuelle ?",
       "options": [
         "Sa patience : 7 ans de fiançailles, il ne fallait pas être pressée",
-        "Sa modestie : seulement 3 enfants, c'est peu pour une Baudevin",
+        "Sa simplicité : se contenter de 3 enfants, c'est peu pour une Baudevin",
         "Sa gentillesse : passion des câlins en soirée",
         "Sa générosité : tous les efforts pour les gens qu'elle aime"
       ],
